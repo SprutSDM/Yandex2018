@@ -2,6 +2,7 @@ package ru.zakoulov.gallery;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -17,12 +18,13 @@ public class ListImagesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recyclerview);
 
-        List<Image> images = new ArrayList<Image>();
+        List<Image> images = new ArrayList<>();
         testFill(images);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        int numberOfColumns = 2;
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(images);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
