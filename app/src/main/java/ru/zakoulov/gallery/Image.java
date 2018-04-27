@@ -4,13 +4,13 @@ package ru.zakoulov.gallery;
  * Created by Илья on 25.04.2018.
  */
 public class Image {
-    private int imageID;
+    private String path;
 
-    public void setImageID(int imageID) {
-        this.imageID = imageID;
+    public void setImagePath(String imagePath) {
+        this.path = imagePath;
     }
 
-    public int getImageID() {
-        return imageID;
+    public String getImagePath() {
+        return path;
     }
 }
