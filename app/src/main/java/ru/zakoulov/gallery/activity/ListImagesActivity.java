@@ -13,26 +13,28 @@ import java.util.List;
 import ru.zakoulov.gallery.Image;
 import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.RecyclerViewAdapter;
+import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 25.04.2018.
  */
 public class ListImagesActivity extends Activity {
+    ImageController imageController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        imageController = new ImageController();
         setContentView(R.layout.activity_recyclerview);
-
-        List<Image> images = new ArrayList<>();
-        testFill(images);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         int numberOfColumns = 2;
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, images);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, imageController.getListImages());
         LinearLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+
     }
 
     private void testFill(List<Image> images) {

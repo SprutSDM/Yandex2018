@@ -37,7 +37,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         //Log.d("abacaba", context.getResources().getIdentifier(images.get(i).getImagePath(), "drawable", context.getPackageName()));
         Picasso.with(context)
-                .load(context.getResources().getIdentifier(images.get(i).getImagePath(), "drawable", context.getPackageName()))
+                //.load(context.getResources().getIdentifier(images.get(i).getImagePath(), "drawable", context.getPackageName()))
+                .load(images.get(i).getImagePath())
                 .fit()
                 .centerCrop()
                 .into(viewHolder.image);
