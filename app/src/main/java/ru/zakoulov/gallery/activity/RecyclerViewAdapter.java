@@ -13,18 +13,20 @@ import java.util.List;
 
 import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.imageController.Image;
-import ru.zakoulov.gallery.imageController.TaskResponse;
+import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 26.04.2018.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+    private ImageController imageController;
     private List<Image> images;
     private Context context;
 
-    public RecyclerViewAdapter(Context context, List<Image> images) {
+    public RecyclerViewAdapter(Context context, ImageController imageController) {
         this.context = context;
-        this.images = images;
+        this.imageController = imageController;
+        this.images = imageController.getListImages();
     }
 
     @Override
@@ -42,6 +44,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .fit()
                 .centerCrop()
                 .into(viewHolder.image);
+        if (i + 10 > images.size() && !imageController.getIsLoad())
+            imageController.downloadUrls();
     }
 
     @Override

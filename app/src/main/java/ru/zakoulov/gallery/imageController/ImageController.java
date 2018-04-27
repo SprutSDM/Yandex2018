@@ -14,7 +14,13 @@ public class ImageController implements TaskResponse {
     String rootUrl = "https://apod.nasa.gov/apod/";
     String archiveUrl = "https://apod.nasa.gov/apod/archivepix.html";
 
+    int countImagesPerUpdate = 10; // Количество загружаемых картинок при обновлении
+    int countViewedLinks = 0; // Количество посмотренных ссылок для загрузки изображений
+    // != количеству элементов в списке, т.к. иногда встречаются видео, которые не сохраняются в списке.
+
     ListImagesActivity listImagesActivity;
+
+    boolean isLoad = false;
 
     List<Image> images;
     List<String> allUrls;
@@ -33,12 +39,14 @@ public class ImageController implements TaskResponse {
     }
 
     public void downloadUrls() {
+        isLoad = true;
         LoadImageUrl loadImageUrl = new LoadImageUrl();
         loadImageUrl.setTaskResponse(this);
         List<String> urls = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            urls.add(rootUrl + allUrls.get(images.size() + i));
+        for (int i = 0; i < countImagesPerUpdate; i++) {
+            urls.add(rootUrl + allUrls.get(countViewedLinks + i));
         }
+        countViewedLinks += countImagesPerUpdate;
         loadImageUrl.execute(urls);
     }
 
@@ -70,5 +78,14 @@ public class ImageController implements TaskResponse {
                     listImagesActivity.getAdapter().notifyDataSetChanged();
             }
         });
+        isLoad = false;
+    }
+
+    public void setIsLoad(boolean value) {
+        isLoad = value;
+    }
+
+    public boolean getIsLoad() {
+        return isLoad;
     }
 }

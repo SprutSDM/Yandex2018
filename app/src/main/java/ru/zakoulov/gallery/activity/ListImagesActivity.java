@@ -29,7 +29,8 @@ public class ListImagesActivity extends Activity {
     }
 
     public void showAllImages() {
-        adapter = new RecyclerViewAdapter(this, imageController.getListImages());
+        isVisible = true;
+        adapter = new RecyclerViewAdapter(this, imageController);
         LinearLayoutManager layoutManager = new GridLayoutManager(this, numberOfColumns);
         findViewById(R.id.progressBar).setVisibility(ProgressBar.INVISIBLE);
         recyclerView.setVisibility(RecyclerView.VISIBLE);
