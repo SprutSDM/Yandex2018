@@ -1,10 +1,7 @@
-package ru.zakoulov.gallery;
+package ru.zakoulov.gallery.activity;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +9,11 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
+
+import ru.zakoulov.gallery.R;
+import ru.zakoulov.gallery.imageController.Image;
+import ru.zakoulov.gallery.imageController.TaskResponse;
 
 /**
  * Created by Илья on 26.04.2018.

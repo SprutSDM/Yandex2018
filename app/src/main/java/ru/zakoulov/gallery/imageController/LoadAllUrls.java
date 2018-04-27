@@ -1,7 +1,6 @@
 package ru.zakoulov.gallery.imageController;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,12 +11,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.zakoulov.gallery.Image;
-
 /**
  * Created by Илья on 27.04.2018.
  */
 public class LoadAllUrls extends AsyncTask<String, Void, List> {
+    TaskResponse taskResponse;
+
     @Override
     protected List doInBackground(String... params) {
         List<String> urls = new ArrayList<>();
@@ -31,6 +30,11 @@ public class LoadAllUrls extends AsyncTask<String, Void, List> {
         } catch (IOException e) {
 
         }
+        taskResponse.loadAllUrlsResponse(urls);
         return urls;
+    }
+
+    public void setTaskResponse(TaskResponse taskResponse) {
+        this.taskResponse = taskResponse;
     }
 }
