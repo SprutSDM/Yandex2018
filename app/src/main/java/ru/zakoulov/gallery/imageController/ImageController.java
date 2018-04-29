@@ -2,10 +2,12 @@ package ru.zakoulov.gallery.imageController;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import ru.zakoulov.gallery.activity.ListImagesActivity;
 
@@ -14,7 +16,6 @@ import ru.zakoulov.gallery.activity.ListImagesActivity;
  */
 public class ImageController implements TaskResponse {
     String rootUrl = "https://apod.nasa.gov/apod/";
-    String dailyImageUrl = "https://apod.nasa.gov/apod/ap130108.html";
 
     int countImagesPerUpdate = 10; // Количество загружаемых картинок при обновлении
     int countViewedLinks = 0; // Количество посмотренных ссылок для загрузки изображений
@@ -39,7 +40,7 @@ public class ImageController implements TaskResponse {
     public void downloadDailyImage() {
         LoadDailyImage loadDailyImage = new LoadDailyImage();
         loadDailyImage.setTaskResponse(this);
-        loadDailyImage.execute(dailyImageUrl);
+        loadDailyImage.execute(rootUrl);
     }
 
     public void downloadUrls() {
@@ -47,8 +48,10 @@ public class ImageController implements TaskResponse {
         LoadImageUrl loadImageUrl = new LoadImageUrl();
         loadImageUrl.setTaskResponse(this);
         List<String> urls = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd", Locale.getDefault());
         for (int i = 0; i < countImagesPerUpdate; i++) {
-            //urls.add(rootUrl + allUrls.get(countViewedLinks + i));
+            urls.add(rootUrl + "ap" + simpleDateFormat.format(calendar.getTime()) + ".html");
+            calendar.add(Calendar.DAY_OF_YEAR, -1);
         }
         countViewedLinks += countImagesPerUpdate;
         loadImageUrl.execute(urls);
@@ -93,6 +96,7 @@ public class ImageController implements TaskResponse {
         }
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dates[2]));
+        downloadUrls();
     }
 
     // Callback при загрузки url картинок
