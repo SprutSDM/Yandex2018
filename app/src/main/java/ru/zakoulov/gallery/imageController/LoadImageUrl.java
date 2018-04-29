@@ -30,7 +30,7 @@ public class LoadImageUrl extends AsyncTask<List<String>, Void, List> {
         } catch (IOException e) {
 
         }
-        taskResponse.loadImageUrlResponse(urls);
+        taskResponse.loadImagesUrlResponse(urls);
         return urls;
     }
 

@@ -3,6 +3,8 @@ package ru.zakoulov.gallery.imageController;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ru.zakoulov.gallery.activity.ListImagesActivity;
@@ -12,7 +14,7 @@ import ru.zakoulov.gallery.activity.ListImagesActivity;
  */
 public class ImageController implements TaskResponse {
     String rootUrl = "https://apod.nasa.gov/apod/";
-    String archiveUrl = "https://apod.nasa.gov/apod/archivepix.html";
+    String dailyImageUrl = "https://apod.nasa.gov/apod/ap130108.html";
 
     int countImagesPerUpdate = 10; // Количество загружаемых картинок при обновлении
     int countViewedLinks = 0; // Количество посмотренных ссылок для загрузки изображений
@@ -20,22 +22,24 @@ public class ImageController implements TaskResponse {
 
     ListImagesActivity listImagesActivity;
 
+    Calendar calendar;
+
     boolean isLoad = false;
 
     List<Image> images;
-    List<String> allUrls;
 
     public ImageController(ListImagesActivity listImagesActivity) {
         this.listImagesActivity = listImagesActivity;
         images = new ArrayList<>();
-        downloadAllUrls();
+        calendar = new GregorianCalendar();
+        downloadDailyImage();
     }
 
     // Получение всех ссылок на страницы с картинками
-    public void downloadAllUrls() {
-        LoadAllUrls loadAllUrls = new LoadAllUrls();
-        loadAllUrls.setTaskResponse(this);
-        loadAllUrls.execute(archiveUrl);
+    public void downloadDailyImage() {
+        LoadDailyImage loadDailyImage = new LoadDailyImage();
+        loadDailyImage.setTaskResponse(this);
+        loadDailyImage.execute(dailyImageUrl);
     }
 
     public void downloadUrls() {
@@ -44,7 +48,7 @@ public class ImageController implements TaskResponse {
         loadImageUrl.setTaskResponse(this);
         List<String> urls = new ArrayList<>();
         for (int i = 0; i < countImagesPerUpdate; i++) {
-            urls.add(rootUrl + allUrls.get(countViewedLinks + i));
+            //urls.add(rootUrl + allUrls.get(countViewedLinks + i));
         }
         countViewedLinks += countImagesPerUpdate;
         loadImageUrl.execute(urls);
@@ -54,14 +58,45 @@ public class ImageController implements TaskResponse {
         return images;
     }
 
-    // Callback при загрузке всех url
-    public void loadAllUrlsResponse(List<String> items) {
-        allUrls = items;
-        downloadUrls();
+    // Callback при загрузке Изображения дня
+    public void loadDailyImageResponse(String date) {
+        Log.d("date", "." + date + ".");
+        String[] dates = date.split(" ");
+        calendar.set(Calendar.YEAR, Integer.parseInt(dates[0]));
+        int month = 0;
+        // Не использую SimpleDateFormat т.к. не получается парсить месяц
+        switch (dates[1]) {
+            case "January":
+                month = 0; break;
+            case "February":
+                month = 1; break;
+            case "March":
+                month = 2; break;
+            case "April":
+                month = 3; break;
+            case "May":
+                month = 4; break;
+            case "June":
+                month = 5; break;
+            case "July":
+                month = 6; break;
+            case "August":
+                month = 7; break;
+            case "September":
+                month = 8; break;
+            case "October":
+                month = 9; break;
+            case "November":
+                month = 10; break;
+            case "December":
+                month = 11; break;
+        }
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dates[2]));
     }
 
     // Callback при загрузки url картинок
-    public void loadImageUrlResponse(List<String> items) {
+    public void loadImagesUrlResponse(List<String> items) {
         List<String> urlsImages = items;
         for (int i = 0; i < urlsImages.size(); i++) {
             Image image = new Image();

@@ -8,6 +8,6 @@ import java.util.List;
  * Created by Илья on 27.04.2018.
  */
 public interface TaskResponse {
-    void loadAllUrlsResponse(List<String> items);
-    void loadImageUrlResponse(List<String> items);
+    void loadDailyImageResponse(String date);
+    void loadImagesUrlResponse(List<String> items);
 }
