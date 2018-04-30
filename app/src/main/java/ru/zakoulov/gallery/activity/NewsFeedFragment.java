@@ -27,24 +27,29 @@ public class NewsFeedFragment extends Fragment {
     boolean isVisible = false;
     View view;
 
-    public static NewsFeedFragment newInstance() {
-        NewsFeedFragment newsFeedFragment = new NewsFeedFragment();
-        return newsFeedFragment;
+    public static NewsFeedFragment newInstance(ImageController imageController) {
+        NewsFeedFragment fragment = new NewsFeedFragment();
+        fragment.imageController = imageController;
+        if (imageController.newsFeedFragment == null)
+            imageController.newsFeedFragment = fragment;
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("fragment", "create");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //setContentView(R.layout.fragment_news_feed);
-        view = inflater.inflate(R.layout.fragment_news_feed, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        imageController = new ImageController(this);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_news_feed, container, false);
+            recyclerView = view.findViewById(R.id.recyclerView);
+            //imageController;
+        }
         return view;
     }
 
@@ -68,6 +73,6 @@ public class NewsFeedFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        Log.d("fragment", "destroy");
+        super.onDestroy();
     }
 }

@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .centerCrop()
                 .into(viewHolder.image);
         if (i + 10 > images.size() && !imageController.getIsLoad())
-            imageController.downloadUrls();
+            imageController.downloadImagesUrl();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.listImage);
+            image = itemView.findViewById(R.id.listImage);
         }
     }
 }

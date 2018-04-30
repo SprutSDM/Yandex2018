@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import ru.zakoulov.gallery.activity.DailyPhotoFragment;
 import ru.zakoulov.gallery.activity.NewsFeedFragment;
 
 /**
@@ -21,16 +22,16 @@ public class ImageController implements TaskResponse {
     int countViewedLinks = 0; // Количество посмотренных ссылок для загрузки изображений
     // != количеству элементов в списке, т.к. иногда встречаются видео, которые не сохраняются в списке.
 
-    NewsFeedFragment listImagesActivity;
-
     Calendar calendar;
 
     boolean isLoad = false;
 
     List<Image> images;
 
-    public ImageController(NewsFeedFragment listImagesActivity) {
-        this.listImagesActivity = listImagesActivity;
+    public DailyPhotoFragment dailyPhotoFragment; // Экран с Фото дня
+    public NewsFeedFragment newsFeedFragment; // Экран с Лентой
+
+    public ImageController() {
         images = new ArrayList<>();
         calendar = new GregorianCalendar();
         downloadDailyImage();
@@ -43,7 +44,8 @@ public class ImageController implements TaskResponse {
         loadDailyImage.execute(rootUrl);
     }
 
-    public void downloadUrls() {
+    // Получение ссылок на изображения
+    public void downloadImagesUrl() {
         isLoad = true;
         LoadImageUrl loadImageUrl = new LoadImageUrl();
         loadImageUrl.setTaskResponse(this);
@@ -57,11 +59,7 @@ public class ImageController implements TaskResponse {
         loadImageUrl.execute(urls);
     }
 
-    public List<Image> getListImages() {
-        return images;
-    }
-
-    // Callback при загрузке Изображения дня
+    // Callback при загрузке Фото дня
     public void loadDailyImageResponse(String date) {
         Log.d("date", "." + date + ".");
         String[] dates = date.split(" ");
@@ -96,32 +94,33 @@ public class ImageController implements TaskResponse {
         }
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dates[2]));
-        downloadUrls();
+        downloadImagesUrl();
     }
 
     // Callback при загрузки url картинок
     public void loadImagesUrlResponse(List<String> items) {
-        List<String> urlsImages = items;
-        for (int i = 0; i < urlsImages.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {
             Image image = new Image();
-            image.setImagePath(rootUrl + urlsImages.get(i));
+            image.setImagePath(rootUrl + items.get(i));
             images.add(image);
         }
-        listImagesActivity.getActivity().runOnUiThread(new Runnable() {
+        newsFeedFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (!dailyPhotoFragment.isShow())
+                    dailyPhotoFragment.showImage();
                 // Если окно не видимо, то подгружаем адаптер и показываем всё
-                if (!listImagesActivity.isShow())
-                    listImagesActivity.showAllImages();
+                if (!newsFeedFragment.isShow())
+                    newsFeedFragment.showAllImages();
                 else // Иначе надо показать изменения
-                    listImagesActivity.getAdapter().notifyDataSetChanged();
+                    newsFeedFragment.getAdapter().notifyDataSetChanged();
             }
         });
         isLoad = false;
     }
 
-    public void setIsLoad(boolean value) {
-        isLoad = value;
+    public List<Image> getListImages() {
+        return images;
     }
 
     public boolean getIsLoad() {
