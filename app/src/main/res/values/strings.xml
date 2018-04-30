@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="daily_photo">Фото дня</string>
+    <string name="feed_news">Лента</string>
+    <string name="offline">Оффлайн</string>
 </resources>

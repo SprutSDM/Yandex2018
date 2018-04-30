@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="D:\Android_Projects\Gallery\app\build\intermediates\exploded-aar\com.android.support\design\26.0.0-alpha1\jars\classes.jar"
+        jumboMode="false"
+        revision="26.0.1"
+        sha1="6a022bf00ccd0948a8180c505e8e458bbddd43a6">
+        <dex dex="D:\Android_Projects\Gallery\app\build\intermediates\pre-dexed\debug\com.android.support-design-26.0.0-alpha1_21113d137aceb7a0cb98cd469c431d85af13d84f.jar" />
+    </item>
+    <item
+        jar="D:\Android_Projects\Gallery\app\build\intermediates\exploded-aar\com.android.support\transition\26.0.0-alpha1\jars\classes.jar"
+        jumboMode="false"
+        revision="26.0.1"
+        sha1="cddcd0fb93bc70e27325f2f715b2710332004ebb">
+        <dex dex="D:\Android_Projects\Gallery\app\build\intermediates\pre-dexed\debug\com.android.support-transition-26.0.0-alpha1_0ae39d77307463943274db78a50d05c85cdbf29e.jar" />
+    </item>
+
+</items>

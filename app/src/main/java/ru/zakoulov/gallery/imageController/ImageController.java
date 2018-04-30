@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import ru.zakoulov.gallery.activity.ListImagesActivity;
+import ru.zakoulov.gallery.activity.NewsFeedFragment;
 
 /**
  * Created by Илья on 27.04.2018.
@@ -21,7 +21,7 @@ public class ImageController implements TaskResponse {
     int countViewedLinks = 0; // Количество посмотренных ссылок для загрузки изображений
     // != количеству элементов в списке, т.к. иногда встречаются видео, которые не сохраняются в списке.
 
-    ListImagesActivity listImagesActivity;
+    NewsFeedFragment listImagesActivity;
 
     Calendar calendar;
 
@@ -29,7 +29,7 @@ public class ImageController implements TaskResponse {
 
     List<Image> images;
 
-    public ImageController(ListImagesActivity listImagesActivity) {
+    public ImageController(NewsFeedFragment listImagesActivity) {
         this.listImagesActivity = listImagesActivity;
         images = new ArrayList<>();
         calendar = new GregorianCalendar();
@@ -107,11 +107,11 @@ public class ImageController implements TaskResponse {
             image.setImagePath(rootUrl + urlsImages.get(i));
             images.add(image);
         }
-        listImagesActivity.runOnUiThread(new Runnable() {
+        listImagesActivity.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // Если окно не видимо, то подгружаем адаптер и показываем всё
-                if (!listImagesActivity.isVisible())
+                if (!listImagesActivity.isShow())
                     listImagesActivity.showAllImages();
                 else // Иначе надо показать изменения
                     listImagesActivity.getAdapter().notifyDataSetChanged();
