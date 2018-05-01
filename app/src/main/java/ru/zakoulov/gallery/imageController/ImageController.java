@@ -2,12 +2,11 @@ package ru.zakoulov.gallery.imageController;
 
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import ru.zakoulov.gallery.activity.DailyPhotoFragment;
 import ru.zakoulov.gallery.activity.NewsFeedFragment;
@@ -16,16 +15,15 @@ import ru.zakoulov.gallery.activity.NewsFeedFragment;
  * Created by Илья on 27.04.2018.
  */
 public class ImageController implements TaskResponse {
-    String rootUrl = "https://apod.nasa.gov/apod/";
+    String rootPath = "https://apod.nasa.gov/apod/";
 
     int countImagesPerUpdate = 10; // Количество загружаемых картинок при обновлении
-    int countViewedLinks = 0; // Количество посмотренных ссылок для загрузки изображений
-    // != количеству элементов в списке, т.к. иногда встречаются видео, которые не сохраняются в списке.
 
     Calendar calendar;
 
-    boolean isLoad = false;
+    boolean isLoading = false;
 
+    public Image dailyImage = null;
     List<Image> images;
 
     public DailyPhotoFragment dailyPhotoFragment; // Экран с Фото дня
@@ -37,78 +35,78 @@ public class ImageController implements TaskResponse {
         downloadDailyImage();
     }
 
-    // Получение всех ссылок на страницы с картинками
+    // Загрузить фото дня для получения текущей даты
     public void downloadDailyImage() {
         LoadDailyImage loadDailyImage = new LoadDailyImage();
         loadDailyImage.setTaskResponse(this);
-        loadDailyImage.execute(rootUrl);
+        loadDailyImage.execute(rootPath);
     }
 
     // Получение ссылок на изображения
-    public void downloadImagesUrl() {
-        isLoad = true;
-        LoadImageUrl loadImageUrl = new LoadImageUrl();
-        loadImageUrl.setTaskResponse(this);
-        List<String> urls = new ArrayList<>();
+    public void downloadImages(Date date, int count) {
+
+        isLoading = true;
+        LoadImages loadImages = new LoadImages();
+        loadImages.setTaskResponse(this);
+        loadImages.setCountImages(count);
+        loadImages.setDate(date);
+        loadImages.setRootPath(rootPath);
+
+        /*List<String> urls = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd", Locale.getDefault());
         for (int i = 0; i < countImagesPerUpdate; i++) {
-            urls.add(rootUrl + "ap" + simpleDateFormat.format(calendar.getTime()) + ".html");
+            urls.add(rootPath + "ap" + simpleDateFormat.format(calendar.getTime()) + ".html");
             calendar.add(Calendar.DAY_OF_YEAR, -1);
-        }
-        countViewedLinks += countImagesPerUpdate;
-        loadImageUrl.execute(urls);
+        }*/
+        loadImages.execute();
+    }
+
+    public void downloadImages(Date date) {
+        downloadImages(date, countImagesPerUpdate);
+    }
+
+    public void downloadImages() {
+        if (isLoading)
+            return;
+        calendar.setTime(images.get(images.size() - 1).getDate());
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        downloadImages(calendar.getTime());
     }
 
     // Callback при загрузке Фото дня
-    public void loadDailyImageResponse(String date) {
-        Log.d("date", "." + date + ".");
-        String[] dates = date.split(" ");
-        calendar.set(Calendar.YEAR, Integer.parseInt(dates[0]));
-        int month = 0;
-        // Не использую SimpleDateFormat т.к. не получается парсить месяц
-        switch (dates[1]) {
-            case "January":
-                month = 0; break;
-            case "February":
-                month = 1; break;
-            case "March":
-                month = 2; break;
-            case "April":
-                month = 3; break;
-            case "May":
-                month = 4; break;
-            case "June":
-                month = 5; break;
-            case "July":
-                month = 6; break;
-            case "August":
-                month = 7; break;
-            case "September":
-                month = 8; break;
-            case "October":
-                month = 9; break;
-            case "November":
-                month = 10; break;
-            case "December":
-                month = 11; break;
+    public void loadDailyImageResponse(Image image) {
+        if (image == null) {
+            return;
         }
-        calendar.set(Calendar.MONTH, month);
-        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dates[2]));
-        downloadImagesUrl();
+        Log.d("path", image.getPath());
+        Log.d("full_path", image.getFullPath());
+        Log.d("date", image.getDate().toString());
+        Log.d("name", image.getName());
+        image.setPath(rootPath + image.getPath());
+        image.setFullPath(rootPath + image.getFullPath());
+        dailyImage = image;
+        images.add(dailyImage);
+        dailyPhotoFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dailyPhotoFragment.showImage();
+                downloadImages();
+            }
+        });
+        downloadImages();
     }
 
     // Callback при загрузки url картинок
-    public void loadImagesUrlResponse(List<String> items) {
-        for (int i = 0; i < items.size(); i++) {
+    public void loadImagesResponse(List<Image> items) {
+        /*for (int i = 0; i < items.size(); i++) {
             Image image = new Image();
-            image.setImagePath(rootUrl + items.get(i));
+            image.setPath(rootPath + items.get(i));
             images.add(image);
-        }
+        }*/
+        this.images.addAll(items);
         newsFeedFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (!dailyPhotoFragment.isShow())
-                    dailyPhotoFragment.showImage();
                 // Если окно не видимо, то подгружаем адаптер и показываем всё
                 if (!newsFeedFragment.isShow())
                     newsFeedFragment.showAllImages();
@@ -116,7 +114,7 @@ public class ImageController implements TaskResponse {
                     newsFeedFragment.getAdapter().notifyDataSetChanged();
             }
         });
-        isLoad = false;
+        isLoading = false;
     }
 
     public List<Image> getListImages() {
@@ -124,6 +122,6 @@ public class ImageController implements TaskResponse {
     }
 
     public boolean getIsLoad() {
-        return isLoad;
+        return isLoading;
     }
 }

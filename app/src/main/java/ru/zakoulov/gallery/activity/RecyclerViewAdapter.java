@@ -37,15 +37,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        //Log.d("abacaba", context.getResources().getIdentifier(images.get(i).getImagePath(), "drawable", context.getPackageName()));
         Picasso.with(context)
-                //.load(context.getResources().getIdentifier(images.get(i).getImagePath(), "drawable", context.getPackageName()))
-                .load(images.get(i).getImagePath())
+                .load(images.get(i).getPath())
                 .fit()
                 .centerCrop()
                 .into(viewHolder.image);
         if (i + 10 > images.size() && !imageController.getIsLoad())
-            imageController.downloadImagesUrl();
+            imageController.downloadImages();
     }
 
     @Override
