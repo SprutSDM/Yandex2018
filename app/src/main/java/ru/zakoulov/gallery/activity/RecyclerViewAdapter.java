@@ -1,7 +1,10 @@
 package ru.zakoulov.gallery.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,18 +49,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageController.downloadImages();
     }
 
+
     @Override
     public int getItemCount() {
         return images.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView image;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.listImage);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) { // Обработка нажатий
+            int position = getAdapterPosition();
+            Log.d("click", "click");
+            if (position != RecyclerView.NO_POSITION) {
+                Image image = imageController.getListImages().get(position);
+                Intent intent = new Intent(context, FullImageActivity.class);
+                intent.putExtra("position", position);
+                context.startActivity(intent);
+            }
         }
     }
 }

@@ -44,11 +44,9 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //setContentView(R.layout.fragment_news_feed);
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_news_feed, container, false);
             recyclerView = view.findViewById(R.id.recyclerView);
-            //imageController;
         }
         return view;
     }

@@ -57,10 +57,6 @@ public class DailyPhotoFragment extends Fragment {
                 .into((ImageView) view.findViewById(R.id.imageViewDailyPhoto));
     }
 
-    public boolean isShow() {
-        return isVisible;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

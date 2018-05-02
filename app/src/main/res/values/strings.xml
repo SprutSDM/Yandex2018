@@ -6,4 +6,7 @@
     <string name="daily_photo">Фото дня</string>
     <string name="feed_news">Лента</string>
     <string name="offline">Оффлайн</string>
+    <string name="download">Сохранить</string>
+    <string name="album">Space Gallery</string>
+    <string name="finishDownload">A photo was uploaded!</string>
 </resources>

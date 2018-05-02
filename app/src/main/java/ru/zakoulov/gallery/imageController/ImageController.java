@@ -24,7 +24,9 @@ public class ImageController implements TaskResponse {
     boolean isLoading = false;
 
     public Image dailyImage = null;
-    List<Image> images;
+    static List<Image> images;
+
+    public ImageController imageController; // Ссылка на этот же класс. Создаётся при создании
 
     public DailyPhotoFragment dailyPhotoFragment; // Экран с Фото дня
     public NewsFeedFragment newsFeedFragment; // Экран с Лентой
@@ -52,12 +54,6 @@ public class ImageController implements TaskResponse {
         loadImages.setDate(date);
         loadImages.setRootPath(rootPath);
 
-        /*List<String> urls = new ArrayList<>();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd", Locale.getDefault());
-        for (int i = 0; i < countImagesPerUpdate; i++) {
-            urls.add(rootPath + "ap" + simpleDateFormat.format(calendar.getTime()) + ".html");
-            calendar.add(Calendar.DAY_OF_YEAR, -1);
-        }*/
         loadImages.execute();
     }
 
@@ -98,12 +94,7 @@ public class ImageController implements TaskResponse {
 
     // Callback при загрузки url картинок
     public void loadImagesResponse(List<Image> items) {
-        /*for (int i = 0; i < items.size(); i++) {
-            Image image = new Image();
-            image.setPath(rootPath + items.get(i));
-            images.add(image);
-        }*/
-        this.images.addAll(items);
+        images.addAll(items);
         newsFeedFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -117,7 +108,7 @@ public class ImageController implements TaskResponse {
         isLoading = false;
     }
 
-    public List<Image> getListImages() {
+    public static List<Image> getListImages() {
         return images;
     }
 
