@@ -1,13 +1,12 @@
-package ru.zakoulov.gallery.activity;
+package ru.zakoulov.gallery.activity.fullImageActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-import com.github.chrisbanes.photoview.PhotoView;
-import com.squareup.picasso.Picasso;
 
 import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.imageController.DownloadImage;
@@ -19,16 +18,21 @@ import ru.zakoulov.gallery.imageController.ImageController;
 public class FullImageActivity extends Activity {
     ImageController imageController;
     int position;
+    RecyclerView recyclerView;
+    RvaFullImage adapter;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         position = getIntent().getIntExtra("position", 0); // Получение позиции изображения
         setContentView(R.layout.activity_full_image);
-        setTitle(imageController.getListImages().get(position).getName());
-        PhotoView photoView = findViewById(R.id.fullImage);
-        Picasso.with(getBaseContext()).load(imageController.getListImages().get(position).getPath())
-                .into(photoView); // Здесь не загружается картинка в более высоком качестве, т.к. у них изначально высокое качество.
+
+        recyclerView = findViewById(R.id.recyclerViewFullImage);
+        adapter = new RvaFullImage(this, imageController);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override

@@ -8,48 +8,48 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ru.zakoulov.gallery.activity.DailyPhotoFragment;
-import ru.zakoulov.gallery.activity.NewsFeedFragment;
+import ru.zakoulov.gallery.activity.dailyImage.DailyImageFragment;
+import ru.zakoulov.gallery.activity.newsFeedFragment.NewsFeedFragment;
+import ru.zakoulov.gallery.imageController.tasks.LoadDailyImage;
+import ru.zakoulov.gallery.imageController.tasks.LoadImages;
 
 /**
  * Created by Илья on 27.04.2018.
  */
-public class ImageController implements TaskResponse {
-    String rootPath = "https://apod.nasa.gov/apod/";
+public class ImageController {
+    static String rootPath = "https://apod.nasa.gov/apod/";
 
-    int countImagesPerUpdate = 10; // Количество загружаемых картинок при обновлении
+    static int countImagesPerUpdate = 10; // Количество загружаемых картинок при обновлении
 
-    Calendar calendar;
+    static Calendar calendar;
 
-    boolean isLoading = false;
+    static boolean isLoading = false;
 
-    public Image dailyImage = null;
+    public static Image dailyImage = null;
     static List<Image> images;
 
-    public ImageController imageController; // Ссылка на этот же класс. Создаётся при создании
+    public static ImageController imageController; // Ссылка на этот же класс. Создаётся при создании
 
-    public DailyPhotoFragment dailyPhotoFragment; // Экран с Фото дня
-    public NewsFeedFragment newsFeedFragment; // Экран с Лентой
+    public static DailyImageFragment dailyPhotoFragment; // Экран с Фото дня
+    public static NewsFeedFragment newsFeedFragment; // Экран с Лентой
 
-    public ImageController() {
+    public static void load() {
         images = new ArrayList<>();
         calendar = new GregorianCalendar();
         downloadDailyImage();
     }
 
-    // Загрузить фото дня для получения текущей даты
-    public void downloadDailyImage() {
+    /** Загружает фото дня для получения текущей даты */
+    public static void downloadDailyImage() {
         LoadDailyImage loadDailyImage = new LoadDailyImage();
-        loadDailyImage.setTaskResponse(this);
         loadDailyImage.execute(rootPath);
     }
 
-    // Получение ссылок на изображения
-    public void downloadImages(Date date, int count) {
+    /** Получает ссылки на изображения */
+    public static void downloadImages(Date date, int count) {
 
         isLoading = true;
         LoadImages loadImages = new LoadImages();
-        loadImages.setTaskResponse(this);
         loadImages.setCountImages(count);
         loadImages.setDate(date);
         loadImages.setRootPath(rootPath);
@@ -57,27 +57,24 @@ public class ImageController implements TaskResponse {
         loadImages.execute();
     }
 
-    public void downloadImages(Date date) {
+    /** Загружает ссылки на картинки
+     * @param date Дата, с которой начинать загружать картинки */
+    public static void downloadImages(Date date) {
         downloadImages(date, countImagesPerUpdate);
     }
 
-    public void downloadImages() {
+    public static void downloadImages() {
         if (isLoading)
             return;
         calendar.setTime(images.get(images.size() - 1).getDate());
-        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        calendar.add(Calendar.DAY_OF_YEAR, -1); // Вычитание даты из за того, что хотим получить более старые картинки
         downloadImages(calendar.getTime());
     }
 
-    // Callback при загрузке Фото дня
-    public void loadDailyImageResponse(Image image) {
-        if (image == null) {
+    /** Callback при загрузке Фото дня */
+    public static void responseDailyImage(Image image) {
+        if (image == null)
             return;
-        }
-        Log.d("path", image.getPath());
-        Log.d("full_path", image.getFullPath());
-        Log.d("date", image.getDate().toString());
-        Log.d("name", image.getName());
         image.setPath(rootPath + image.getPath());
         image.setFullPath(rootPath + image.getFullPath());
         dailyImage = image;
@@ -92,16 +89,16 @@ public class ImageController implements TaskResponse {
         downloadImages();
     }
 
-    // Callback при загрузки url картинок
-    public void loadImagesResponse(List<Image> items) {
+    /** Callback при загрузки url картинок */
+    public static void responseImagesDownload(List<Image> items) {
         images.addAll(items);
         newsFeedFragment.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Если окно не видимо, то подгружаем адаптер и показываем всё
+                /* Если окно не видимо, то подгружаем адаптер и показываем всё */
                 if (!newsFeedFragment.isShow())
                     newsFeedFragment.showAllImages();
-                else // Иначе надо показать изменения
+                else /* Иначе надо показать изменения */
                     newsFeedFragment.getAdapter().notifyDataSetChanged();
             }
         });
@@ -112,7 +109,7 @@ public class ImageController implements TaskResponse {
         return images;
     }
 
-    public boolean getIsLoad() {
+    public static boolean getIsLoad() {
         return isLoading;
     }
 }

@@ -1,4 +1,4 @@
-package ru.zakoulov.gallery.imageController;
+package ru.zakoulov.gallery.imageController.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -16,11 +16,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import ru.zakoulov.gallery.imageController.Image;
+import ru.zakoulov.gallery.imageController.ImageController;
+
 /**
  * Created by Илья on 27.04.2018.
  */
 public class LoadImages extends AsyncTask<String, Void, List> {
-    TaskResponse taskResponse;
     int countImages;
     Date date;
     String rootPath;
@@ -54,15 +56,11 @@ public class LoadImages extends AsyncTask<String, Void, List> {
             }
         } catch (IOException e) {
             Log.d("error", e.getMessage());
-            taskResponse.loadImagesResponse(null);
+            ImageController.responseImagesDownload(null);
             return null;
         }
-        taskResponse.loadImagesResponse(images);
+        ImageController.responseImagesDownload(images);
         return null;
-    }
-
-    public void setTaskResponse(TaskResponse taskResponse) {
-        this.taskResponse = taskResponse;
     }
 
     public void setCountImages(int countImages) {

@@ -1,4 +1,4 @@
-package ru.zakoulov.gallery.activity;
+package ru.zakoulov.gallery.activity.dailyImage;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,22 +11,20 @@ import android.widget.ProgressBar;
 import com.squareup.picasso.Picasso;
 
 import ru.zakoulov.gallery.R;
-import ru.zakoulov.gallery.imageController.Image;
 import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 30.04.2018.
  */
-public class DailyPhotoFragment extends Fragment {
+public class DailyImageFragment extends Fragment {
     ImageController imageController;
     boolean isVisible = false;
     View view;
 
-    public static DailyPhotoFragment newInstance(ImageController imageController) {
-        DailyPhotoFragment fragment = new DailyPhotoFragment();
-        fragment.imageController = imageController;
-        if (imageController.dailyPhotoFragment == null)
-            imageController.dailyPhotoFragment = fragment;
+    public static DailyImageFragment newInstance() {
+        DailyImageFragment fragment = new DailyImageFragment();
+        if (ImageController.dailyPhotoFragment == null)
+            ImageController.dailyPhotoFragment = fragment;
         return fragment;
     }
 
@@ -41,7 +39,7 @@ public class DailyPhotoFragment extends Fragment {
                              Bundle savedInstanceState) {
         //setContentView(R.layout.fragment_news_feed);
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_daily_photo, container, false);
+            view = inflater.inflate(R.layout.fragment_daily_image, container, false);
             //imageController;
         }
         return view;
@@ -49,12 +47,12 @@ public class DailyPhotoFragment extends Fragment {
 
     public void showImage() {
         isVisible = true;
-        view.findViewById(R.id.progressBarDailyPhoto).setVisibility(ProgressBar.INVISIBLE);
+        view.findViewById(R.id.progressBarDailyImage).setVisibility(ProgressBar.INVISIBLE);
         Picasso.with(view.getContext())
                 .load(imageController.dailyImage.getFullPath())
                 .fit()
                 .centerCrop()
-                .into((ImageView) view.findViewById(R.id.imageViewDailyPhoto));
+                .into((ImageView) view.findViewById(R.id.imageViewDailyImage));
     }
 
     @Override

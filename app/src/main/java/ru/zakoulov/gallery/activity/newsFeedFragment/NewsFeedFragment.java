@@ -1,13 +1,10 @@
-package ru.zakoulov.gallery.activity;
+package ru.zakoulov.gallery.activity.newsFeedFragment;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +17,16 @@ import ru.zakoulov.gallery.imageController.ImageController;
  * Created by Илья on 25.04.2018.
  */
 public class NewsFeedFragment extends Fragment {
-    ImageController imageController;
-    RecyclerViewAdapter adapter;
+    RvaNewsFeed adapter;
     RecyclerView recyclerView;
     int numberOfColumns = 2;
     boolean isVisible = false;
     View view;
 
-    public static NewsFeedFragment newInstance(ImageController imageController) {
+    public static NewsFeedFragment newInstance() {
         NewsFeedFragment fragment = new NewsFeedFragment();
-        fragment.imageController = imageController;
-        if (imageController.newsFeedFragment == null)
-            imageController.newsFeedFragment = fragment;
+        if (ImageController.newsFeedFragment == null)
+            ImageController.newsFeedFragment = fragment;
         return fragment;
     }
 
@@ -46,14 +41,14 @@ public class NewsFeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_news_feed, container, false);
-            recyclerView = view.findViewById(R.id.recyclerView);
+            recyclerView = view.findViewById(R.id.recyclerViewNewsFeed);
         }
         return view;
     }
 
     public void showAllImages() {
         isVisible = true;
-        adapter = new RecyclerViewAdapter(view.getContext(), imageController);
+        adapter = new RvaNewsFeed(view.getContext());
         LinearLayoutManager layoutManager = new GridLayoutManager(view.getContext(), numberOfColumns);
         view.findViewById(R.id.progressBar).setVisibility(ProgressBar.INVISIBLE);
         recyclerView.setVisibility(RecyclerView.VISIBLE);
@@ -61,7 +56,7 @@ public class NewsFeedFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    public RecyclerViewAdapter getAdapter() {
+    public RvaNewsFeed getAdapter() {
         return adapter;
     }
 

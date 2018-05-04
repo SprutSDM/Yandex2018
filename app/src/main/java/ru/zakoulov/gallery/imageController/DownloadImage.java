@@ -1,6 +1,5 @@
 package ru.zakoulov.gallery.imageController;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -15,7 +14,7 @@ import java.io.OutputStream;
 import java.net.URL;
 
 import ru.zakoulov.gallery.R;
-import ru.zakoulov.gallery.activity.FullImageActivity;
+import ru.zakoulov.gallery.activity.fullImageActivity.FullImageActivity;
 
 
 /**

@@ -1,4 +1,4 @@
-package ru.zakoulov.gallery.activity;
+package ru.zakoulov.gallery.activity.mainActivity;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -6,7 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import ru.zakoulov.gallery.R;
-import ru.zakoulov.gallery.activity.NewsFeedFragment;
+import ru.zakoulov.gallery.activity.dailyImage.DailyImageFragment;
+import ru.zakoulov.gallery.activity.newsFeedFragment.NewsFeedFragment;
 import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
@@ -15,20 +16,18 @@ import ru.zakoulov.gallery.imageController.ImageController;
 public class PageFragmentAdapter extends FragmentPagerAdapter {
     private static int PAGE_COUNT = 2;
     Context context;
-    ImageController imageController;
 
-    public PageFragmentAdapter(FragmentManager fm, Context context, ImageController imageController) {
+    public PageFragmentAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
-        this.imageController = imageController;
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == 0)
-            return DailyPhotoFragment.newInstance(imageController);
+            return DailyImageFragment.newInstance();
         if (position == 1)
-            return NewsFeedFragment.newInstance(imageController);
+            return NewsFeedFragment.newInstance();
         /*if (position == 2)
             return NewsFeedFragment.newInstance(imageController);*/
         return null;

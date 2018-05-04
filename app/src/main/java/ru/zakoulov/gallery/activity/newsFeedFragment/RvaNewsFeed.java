@@ -1,7 +1,6 @@
-package ru.zakoulov.gallery.activity;
+package ru.zakoulov.gallery.activity.newsFeedFragment;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,26 +14,25 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ru.zakoulov.gallery.R;
+import ru.zakoulov.gallery.activity.fullImageActivity.FullImageActivity;
 import ru.zakoulov.gallery.imageController.Image;
 import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 26.04.2018.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private ImageController imageController;
+public class RvaNewsFeed extends RecyclerView.Adapter<RvaNewsFeed.ViewHolder> {
     private List<Image> images;
     private Context context;
 
-    public RecyclerViewAdapter(Context context, ImageController imageController) {
+    public RvaNewsFeed(Context context) {
         this.context = context;
-        this.imageController = imageController;
-        this.images = imageController.getListImages();
+        this.images = ImageController.getListImages();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(context).inflate(R.layout.list_image_item, viewGroup, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_news_feed, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -45,8 +43,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .fit()
                 .centerCrop()
                 .into(viewHolder.image);
-        if (i + 10 > images.size() && !imageController.getIsLoad())
-            imageController.downloadImages();
+        if (i + 10 > images.size() && !ImageController.getIsLoad())
+            ImageController.downloadImages();
     }
 
 
@@ -70,7 +68,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             int position = getAdapterPosition();
             Log.d("click", "click");
             if (position != RecyclerView.NO_POSITION) {
-                Image image = imageController.getListImages().get(position);
                 Intent intent = new Intent(context, FullImageActivity.class);
                 intent.putExtra("position", position);
                 context.startActivity(intent);

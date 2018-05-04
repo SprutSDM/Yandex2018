@@ -1,4 +1,4 @@
-package ru.zakoulov.gallery.imageController;
+package ru.zakoulov.gallery.imageController.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -13,11 +13,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import ru.zakoulov.gallery.imageController.Image;
+import ru.zakoulov.gallery.imageController.ImageController;
+
 /**
  * Created by Илья on 27.04.2018.
  */
 public class LoadDailyImage extends AsyncTask<String, Void, Image> {
-    TaskResponse taskResponse;
     Calendar calendar = null;
 
     @Override
@@ -51,11 +53,11 @@ public class LoadDailyImage extends AsyncTask<String, Void, Image> {
                 image.setName(doc.body().select("center").get(1).select("b").first().text());
             } catch (IOException e) {
                 Log.d("error", e.getMessage());
-                taskResponse.loadDailyImageResponse(null);
+                ImageController.responseDailyImage(null);
                 return null;
             }
         }
-        taskResponse.loadDailyImageResponse(image);
+        ImageController.responseDailyImage(image);
         return image;
     }
 
@@ -92,9 +94,5 @@ public class LoadDailyImage extends AsyncTask<String, Void, Image> {
         }
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dates[2]));
-    }
-
-    public void setTaskResponse(TaskResponse taskResponse) {
-        this.taskResponse = taskResponse;
     }
 }
