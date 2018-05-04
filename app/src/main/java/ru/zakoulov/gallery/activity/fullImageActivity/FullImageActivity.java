@@ -3,7 +3,9 @@ package ru.zakoulov.gallery.activity.fullImageActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +23,7 @@ import ru.zakoulov.gallery.imageController.tasks.TaskResponseImages;
  */
 public class FullImageActivity extends Activity implements TaskResponseImages {
     int position;
-    RecyclerView recyclerView;
+    SnappyRecyclerView recyclerView;
     RvaFullImage adapter;
     LinearLayoutManager layoutManager;
 
@@ -36,6 +38,10 @@ public class FullImageActivity extends Activity implements TaskResponseImages {
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.scrollToPosition(position);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
+        recyclerView.dispatchNestedFling(0, 0, false);
     }
 
     @Override
