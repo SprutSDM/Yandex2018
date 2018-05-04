@@ -17,6 +17,7 @@ import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.activity.fullImageActivity.FullImageActivity;
 import ru.zakoulov.gallery.imageController.Image;
 import ru.zakoulov.gallery.imageController.ImageController;
+import ru.zakoulov.gallery.imageController.tasks.TaskResponseImages;
 
 /**
  * Created by Илья on 26.04.2018.
@@ -24,10 +25,12 @@ import ru.zakoulov.gallery.imageController.ImageController;
 public class RvaNewsFeed extends RecyclerView.Adapter<RvaNewsFeed.ViewHolder> {
     private List<Image> images;
     private Context context;
+    private TaskResponseImages taskResponse;
 
-    public RvaNewsFeed(Context context) {
+    public RvaNewsFeed(Context context, TaskResponseImages taskResponse) {
         this.context = context;
         this.images = ImageController.getListImages();
+        this.taskResponse = taskResponse;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class RvaNewsFeed extends RecyclerView.Adapter<RvaNewsFeed.ViewHolder> {
                 .centerCrop()
                 .into(viewHolder.image);
         if (i + 10 > images.size() && !ImageController.getIsLoad())
-            ImageController.downloadImages();
+            ImageController.downloadImages(taskResponse);
     }
 
 

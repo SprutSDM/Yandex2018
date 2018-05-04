@@ -6,10 +6,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
-import ru.zakoulov.gallery.R;
-import ru.zakoulov.gallery.imageController.ImageController;
+import java.util.List;
 
-public class MainActivity extends FragmentActivity {
+import ru.zakoulov.gallery.R;
+import ru.zakoulov.gallery.imageController.Image;
+import ru.zakoulov.gallery.imageController.ImageController;
+import ru.zakoulov.gallery.imageController.tasks.TaskResponseDailyImage;
+
+public class MainActivity extends FragmentActivity implements TaskResponseDailyImage {
     FragmentPagerAdapter adapterViewPager;
 
     @Override
@@ -24,20 +28,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("mainActivity", "destroy");
-    }
+    public void responseDailyImageDownload(Image images) {
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("mainActivity", "pause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d("mainActivity", "stop");
     }
 }

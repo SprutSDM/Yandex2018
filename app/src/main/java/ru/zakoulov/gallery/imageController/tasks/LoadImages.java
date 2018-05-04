@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 
 import ru.zakoulov.gallery.imageController.Image;
-import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 27.04.2018.
@@ -26,6 +25,7 @@ public class LoadImages extends AsyncTask<String, Void, List> {
     int countImages;
     Date date;
     String rootPath;
+    TaskResponseImages taskResponse;
 
     @Override
     protected List doInBackground(String[] params) {
@@ -56,10 +56,10 @@ public class LoadImages extends AsyncTask<String, Void, List> {
             }
         } catch (IOException e) {
             Log.d("error", e.getMessage());
-            ImageController.responseImagesDownload(null);
+            taskResponse.responseImagesDownload(null);
             return null;
         }
-        ImageController.responseImagesDownload(images);
+        taskResponse.responseImagesDownload(images);
         return null;
     }
 
@@ -73,5 +73,9 @@ public class LoadImages extends AsyncTask<String, Void, List> {
 
     public void setRootPath(String rootPath) {
         this.rootPath = rootPath;
+    }
+
+    public void setTaskResponse(TaskResponseImages taskResponse) {
+        this.taskResponse = taskResponse;
     }
 }

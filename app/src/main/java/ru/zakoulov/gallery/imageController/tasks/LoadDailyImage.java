@@ -21,6 +21,7 @@ import ru.zakoulov.gallery.imageController.ImageController;
  */
 public class LoadDailyImage extends AsyncTask<String, Void, Image> {
     Calendar calendar = null;
+    TaskResponseDailyImage taskResponse;
 
     @Override
     protected Image doInBackground(String... params) {
@@ -53,11 +54,11 @@ public class LoadDailyImage extends AsyncTask<String, Void, Image> {
                 image.setName(doc.body().select("center").get(1).select("b").first().text());
             } catch (IOException e) {
                 Log.d("error", e.getMessage());
-                ImageController.responseDailyImage(null);
+                taskResponse.responseDailyImageDownload(null);
                 return null;
             }
         }
-        ImageController.responseDailyImage(image);
+        taskResponse.responseDailyImageDownload(image);
         return image;
     }
 
@@ -94,5 +95,9 @@ public class LoadDailyImage extends AsyncTask<String, Void, Image> {
         }
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dates[2]));
+    }
+
+    public void setTaskResponse(TaskResponseDailyImage taskResponse) {
+        this.taskResponse = taskResponse;
     }
 }

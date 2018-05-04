@@ -10,13 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.util.List;
+
 import ru.zakoulov.gallery.R;
+import ru.zakoulov.gallery.imageController.Image;
 import ru.zakoulov.gallery.imageController.ImageController;
+import ru.zakoulov.gallery.imageController.tasks.TaskResponseImages;
 
 /**
  * Created by Илья on 25.04.2018.
  */
-public class NewsFeedFragment extends Fragment {
+public class NewsFeedFragment extends Fragment implements TaskResponseImages {
     RvaNewsFeed adapter;
     RecyclerView recyclerView;
     int numberOfColumns = 2;
@@ -48,7 +52,7 @@ public class NewsFeedFragment extends Fragment {
 
     public void showAllImages() {
         isVisible = true;
-        adapter = new RvaNewsFeed(view.getContext());
+        adapter = new RvaNewsFeed(view.getContext(), this);
         LinearLayoutManager layoutManager = new GridLayoutManager(view.getContext(), numberOfColumns);
         view.findViewById(R.id.progressBar).setVisibility(ProgressBar.INVISIBLE);
         recyclerView.setVisibility(RecyclerView.VISIBLE);
@@ -67,5 +71,21 @@ public class NewsFeedFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void responseImagesDownload(List<Image> images) {
+        ImageController.getListImages().addAll(images);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                /* Если окно не видимо, то подгружаем адаптер и показываем всё */
+                if (!isShow())
+                    showAllImages();
+                else /* Иначе надо показать изменения */
+                    getAdapter().notifyDataSetChanged();
+            }
+        });
+        ImageController.isLoading = false;
     }
 }
