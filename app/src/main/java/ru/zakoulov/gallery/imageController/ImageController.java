@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import ru.zakoulov.gallery.activity.dailyImage.DailyImageFragment;
 import ru.zakoulov.gallery.activity.newsFeedFragment.NewsFeedFragment;
 import ru.zakoulov.gallery.imageController.tasks.LoadDailyImage;
 import ru.zakoulov.gallery.imageController.tasks.LoadImages;

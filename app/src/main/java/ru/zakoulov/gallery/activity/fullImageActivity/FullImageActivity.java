@@ -56,8 +56,10 @@ public class FullImageActivity extends Activity implements TaskResponseImages {
         if (item.getItemId() == R.id.download) {
             DownloadImage downloadImage = new DownloadImage();
             String params[] = new String[2];
-            params[0] = ImageController.getListImages().get(position).getFullPath();
-            params[1] = ImageController.getListImages().get(position).getName();
+            params[0] = ImageController.getListImages()
+                    .get(layoutManager.findFirstVisibleItemPosition()).getPath();
+            params[1] = ImageController.getListImages()
+                    .get(layoutManager.findFirstVisibleItemPosition()).getName();
             downloadImage.setActivity(this);
             downloadImage.execute(params);
         }

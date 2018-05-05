@@ -1,19 +1,18 @@
 package ru.zakoulov.gallery.activity.mainActivity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-
-import java.util.List;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.imageController.Image;
 import ru.zakoulov.gallery.imageController.ImageController;
 import ru.zakoulov.gallery.imageController.tasks.TaskResponseDailyImage;
 
-public class MainActivity extends FragmentActivity implements TaskResponseDailyImage {
+public class MainActivity extends AppCompatActivity implements TaskResponseDailyImage {
     FragmentPagerAdapter adapterViewPager;
 
     @Override
@@ -22,9 +21,16 @@ public class MainActivity extends FragmentActivity implements TaskResponseDailyI
         ImageController.load();
         setContentView(R.layout.activity_main);
 
-        ViewPager viewPager = findViewById(R.id.pager);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
+        TabLayout tabs = (TabLayout)findViewById(R.id.tabs);
+        tabs.setupWithViewPager(viewPager);
+
         adapterViewPager = new PageFragmentAdapter(getSupportFragmentManager(), getBaseContext());
         viewPager.setAdapter(adapterViewPager);
+
     }
 
     @Override
