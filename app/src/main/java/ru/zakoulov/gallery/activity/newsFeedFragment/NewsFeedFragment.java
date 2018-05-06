@@ -76,6 +76,8 @@ public class NewsFeedFragment extends Fragment implements TaskResponseImages {
     @Override
     public void responseImagesDownload(List<Image> images) {
         ImageController.getListImages().addAll(images);
+        if (getActivity() == null)
+            return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

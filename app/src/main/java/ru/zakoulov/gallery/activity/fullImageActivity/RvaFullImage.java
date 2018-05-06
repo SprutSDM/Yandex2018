@@ -2,6 +2,7 @@ package ru.zakoulov.gallery.activity.fullImageActivity;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class RvaFullImage extends RecyclerView.Adapter<RvaFullImage.ViewHolder> 
         View v = LayoutInflater.from(context).inflate(R.layout.item_full_image, viewGroup, false);
         return new ViewHolder(v);
     }
+
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {

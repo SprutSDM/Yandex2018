@@ -9,4 +9,9 @@
         <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
+    <style name="SpaceGallery.DarkTheme" parent="SpaceGallery.Theme">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+    </style>
+
 </resources>
