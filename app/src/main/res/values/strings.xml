@@ -9,4 +9,6 @@
     <string name="download">Сохранить</string>
     <string name="album">Space Gallery</string>
     <string name="finishDownload">The photo was uploaded!</string>
+    <string name="uploadedImage">The photo already uploaded!</string>
+    <string name="permissionDenied">Requires access to external storage</string>
 </resources>

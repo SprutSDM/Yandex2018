@@ -1,5 +1,6 @@
 package ru.zakoulov.gallery.activity.newsFeedFragment;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -74,6 +75,7 @@ public class NewsFeedFragment extends Fragment implements TaskResponseImages {
     @Override
     /** Сохраняет загруженные картинки и уведомляет adapter об необходимости обновить содержимое */
     public void responseImagesDownload(List<Image> images) {
+        ImageController.isLoading = false;
         if (images == null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -86,6 +88,7 @@ public class NewsFeedFragment extends Fragment implements TaskResponseImages {
         ImageController.getListImages().addAll(images);
         if (getActivity() == null)
             return;
+        saveImages(images);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -96,6 +99,18 @@ public class NewsFeedFragment extends Fragment implements TaskResponseImages {
                     getAdapter().notifyDataSetChanged();
             }
         });
-        ImageController.isLoading = false;
+    }
+
+    private void saveImages(List<Image> items) {
+        SharedPreferences sPref = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        List<Image> images = ImageController.getListImages();
+        ed.putInt("count_images", images.size());
+        for (int i = images.size() - items.size(); i < images.size(); i++) {
+            ed.putString("image_" + i + "_name", images.get(i).getName());
+            ed.putString("image_" + i + "_path", images.get(i).getPath());
+            ed.putLong("image_" + i + "_date", images.get(i).getDate().getTime());
+        }
+        ed.commit();
     }
 }

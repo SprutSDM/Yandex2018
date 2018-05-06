@@ -27,7 +27,7 @@
         android:id="@+id/timeText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/primaryColor"
+        android:textColor="@color/primaryLightColor"
         android:padding="5dp"
         android:layout_alignParentBottom="true"/>
 </RelativeLayout>

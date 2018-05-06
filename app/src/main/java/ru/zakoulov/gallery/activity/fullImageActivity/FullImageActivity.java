@@ -1,16 +1,24 @@
 package ru.zakoulov.gallery.activity.fullImageActivity;
 
+import android.Manifest;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -82,6 +90,17 @@ public class FullImageActivity extends AppCompatActivity implements TaskResponse
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.download) {
+            // Запрос прав на изменение данных на носителе для версии >= M
+            int REQUEST_WRITE_STORAGE = 112;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                boolean hasPermission = (ContextCompat.checkSelfPermission(getBaseContext(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+                if (!hasPermission)
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_WRITE_STORAGE);
+            }
             DownloadImage downloadImage = new DownloadImage();
             String params[] = new String[2];
             params[0] = ImageController.getListImages()
@@ -97,13 +116,36 @@ public class FullImageActivity extends AppCompatActivity implements TaskResponse
     /** Сохраняет загруженные картинки и уведомляет adapter об необходимости обновить содержимое */
     @Override
     public void responseImagesDownload(List<Image> images) {
+        ImageController.isLoading = false;
+        if (images == null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getBaseContext(), "Нет интернет соединения!", Toast.LENGTH_LONG).show();
+                }
+            });
+            return;
+        }
         ImageController.getListImages().addAll(images);
+        saveImages(images);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
             }
         });
-        ImageController.isLoading = false;
+    }
+
+    private void saveImages(List<Image> items) {
+        SharedPreferences sPref = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        List<Image> images = ImageController.getListImages();
+        ed.putInt("count_images", images.size());
+        for (int i = images.size() - items.size(); i < images.size(); i++) {
+            ed.putString("image_" + i + "_name", images.get(i).getName());
+            ed.putString("image_" + i + "_path", images.get(i).getPath());
+            ed.putLong("image_" + i + "_date", images.get(i).getDate().getTime());
+        }
+        ed.commit();
     }
 }

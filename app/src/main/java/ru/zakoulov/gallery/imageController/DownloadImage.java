@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Date;
 
 import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.activity.fullImageActivity.FullImageActivity;
@@ -36,8 +37,15 @@ public class DownloadImage extends AsyncTask<String, Void, Void> {
             file = new File(Environment.getExternalStorageDirectory() + "/SpaceGallery/" + name + ".jpg");
             if (!file.exists())
                 file.createNewFile(); // Создание файла, в который будем сохранять картинку
-            else
+            else {
+                fullImageActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, R.string.uploadedImage, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 return null;
+            }
 
             URL url = new URL(path);
 
@@ -59,6 +67,12 @@ public class DownloadImage extends AsyncTask<String, Void, Void> {
             });
         } catch (IOException e) {
             e.printStackTrace();
+            fullImageActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, R.string.permissionDenied, Toast.LENGTH_LONG).show();
+                }
+            });
         }
         return null;
     }
