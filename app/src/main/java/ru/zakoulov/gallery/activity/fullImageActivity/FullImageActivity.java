@@ -1,6 +1,5 @@
 package ru.zakoulov.gallery.activity.fullImageActivity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +7,6 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +31,6 @@ public class FullImageActivity extends AppCompatActivity implements TaskResponse
     LinearLayoutManager layoutManager;
     TextView textView;
     SimpleDateFormat sdf;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +70,6 @@ public class FullImageActivity extends AppCompatActivity implements TaskResponse
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
-        //recyclerView.dispatchNestedFling(0, 0, false);
     }
 
     @Override
@@ -98,6 +94,7 @@ public class FullImageActivity extends AppCompatActivity implements TaskResponse
         return super.onOptionsItemSelected(item);
     }
 
+    /** Сохраняет загруженные картинки и уведомляет adapter об необходимости обновить содержимое */
     @Override
     public void responseImagesDownload(List<Image> images) {
         ImageController.getListImages().addAll(images);

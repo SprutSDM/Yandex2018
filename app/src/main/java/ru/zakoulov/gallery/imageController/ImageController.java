@@ -31,6 +31,7 @@ public class ImageController {
 
     public static NewsFeedFragment newsFeedFragment; // Экран с Лентой
 
+    /** Инициалзирует класс*/
     public static void load() {
         images = new ArrayList<>();
         calendar = new GregorianCalendar();
@@ -44,7 +45,8 @@ public class ImageController {
         loadDailyImage.execute(rootPath);
     }
 
-    /** Получает ссылки на изображения */
+    /** Загружает ссылки на изображения
+     * @param count Количество, которе надо загрузить */
     public static void downloadImages(TaskResponseImages taskResponse, Date date, int count) {
 
         isLoading = true;
@@ -62,6 +64,8 @@ public class ImageController {
         downloadImages(taskResponse, date, countImagesPerUpdate);
     }
 
+    /** Загружает ссылки на картинки
+     * @param taskResponse Callback при загрузке ссылок */
     public static void downloadImages(TaskResponseImages taskResponse) {
         if (isLoading)
             return;
@@ -70,15 +74,11 @@ public class ImageController {
         downloadImages(taskResponse, calendar.getTime());
     }
 
-    /** Callback при загрузке Фото дня */
-    public static void responseDailyImage(Image image) {
-
-    }
-
     public static List<Image> getListImages() {
         return images;
     }
 
+    /** Возвращает true, если в данный момент идёт загрузка картинок */
     public static boolean getIsLoad() {
         return isLoading;
     }

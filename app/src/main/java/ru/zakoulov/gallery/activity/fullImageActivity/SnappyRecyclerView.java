@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 /**
+ * Стандартная реализация fling работает не так как необходимо.
  * From nesquena/SnappyRecyclerView.java
  */
 

@@ -14,7 +14,6 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import ru.zakoulov.gallery.imageController.Image;
-import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 27.04.2018.
@@ -62,6 +61,9 @@ public class LoadDailyImage extends AsyncTask<String, Void, Image> {
         return image;
     }
 
+    /** Из строки date сохраняет дату в calendar
+     * @param date Строка с сайта, в которой написана дата публикации картинки
+     */
     private void parseDate(String date) {
         String[] dates = date.split(" ");
         calendar.set(Calendar.YEAR, Integer.parseInt(dates[0]));

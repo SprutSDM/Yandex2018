@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class NewsFeedFragment extends Fragment implements TaskResponseImages {
         return view;
     }
 
+    /** Отображает картинки на экране */
     public void showAllImages() {
         isVisible = true;
         adapter = new RvaNewsFeed(view.getContext(), this);
@@ -64,17 +66,23 @@ public class NewsFeedFragment extends Fragment implements TaskResponseImages {
         return adapter;
     }
 
+    /** Возвращает true, если картинки отображены на экране */
     public boolean isShow() {
         return isVisible;
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
+    /** Сохраняет загруженные картинки и уведомляет adapter об необходимости обновить содержимое */
     public void responseImagesDownload(List<Image> images) {
+        if (images == null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), "Нет интернет соединения!", Toast.LENGTH_LONG).show();
+                }
+            });
+            return;
+        }
         ImageController.getListImages().addAll(images);
         if (getActivity() == null)
             return;

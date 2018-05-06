@@ -8,11 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import ru.zakoulov.gallery.R;
-import ru.zakoulov.gallery.imageController.Image;
 import ru.zakoulov.gallery.imageController.ImageController;
-import ru.zakoulov.gallery.imageController.tasks.TaskResponseDailyImage;
 
-public class MainActivity extends AppCompatActivity implements TaskResponseDailyImage {
+public class MainActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
 
     @Override
@@ -30,11 +28,5 @@ public class MainActivity extends AppCompatActivity implements TaskResponseDaily
 
         adapterViewPager = new PageFragmentAdapter(getSupportFragmentManager(), getBaseContext());
         viewPager.setAdapter(adapterViewPager);
-
-    }
-
-    @Override
-    public void responseDailyImageDownload(Image images) {
-
     }
 }

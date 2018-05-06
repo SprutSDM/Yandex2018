@@ -1,7 +1,5 @@
 package ru.zakoulov.gallery.imageController.tasks;
 
-import java.util.List;
-
 import ru.zakoulov.gallery.imageController.Image;
 
 /**

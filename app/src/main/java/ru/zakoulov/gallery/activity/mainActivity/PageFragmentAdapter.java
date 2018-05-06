@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import ru.zakoulov.gallery.R;
 import ru.zakoulov.gallery.activity.dailyImage.DailyImageFragment;
 import ru.zakoulov.gallery.activity.newsFeedFragment.NewsFeedFragment;
-import ru.zakoulov.gallery.imageController.ImageController;
 
 /**
  * Created by Илья on 30.04.2018.
